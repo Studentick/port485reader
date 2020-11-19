@@ -26,7 +26,8 @@ namespace Port485Reader
             {
                 Thread.Sleep(500);
                 // tmp = Console.ReadLine();
-                tmp = "4D 33 33 37 32 32 0D";
+                // tmp = "4D 33 33 37 32 32 0D";
+                tmp = "33722";
                 SendMsg(tmp);
 
             }
@@ -148,18 +149,16 @@ namespace Port485Reader
 
         public static void SendMsg(string msg)
         {
-            string temp = "33722";
-            string pre = "4D", post = "0D";
-            byte[] ggg = Encoding.ASCII.GetBytes("M33722");
+            //string temp = "33722";
+            string pre = "4D ", post = " 0D";
+            byte[] ggg = Encoding.ASCII.GetBytes("33722");
             string gggg = "";
             for (Int32 i = 0; i < ggg.Length; i++)
                 gggg += " " + ByteToStrHex(ggg[i]);
-            gggg += " 0D";
+            gggg = pre + gggg + post;
             byte[] bmsg = StrHexToByte(gggg.Replace(" ", ""));
-            byte[] bmsg1 = StrHexToByte(msg.Replace(" ", ""));
             // = Encoding.ASCII.GetBytes("M33722");
             int bl = bmsg.Length;
-            int bl1 = bmsg1.Length;
             serialP.Write(bmsg, 0, bl);
         }
         public static byte[] FromHex(string hex)
