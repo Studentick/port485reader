@@ -148,9 +148,18 @@ namespace Port485Reader
 
         public static void SendMsg(string msg)
         {
-            byte[] bmsg = StrHexToByte(msg.Replace(" ", ""));
+            string temp = "33722";
+            string pre = "4D", post = "0D";
+            byte[] ggg = Encoding.ASCII.GetBytes("M33722");
+            string gggg = "";
+            for (Int32 i = 0; i < ggg.Length; i++)
+                gggg += " " + ByteToStrHex(ggg[i]);
+            gggg += " 0D";
+            byte[] bmsg = StrHexToByte(gggg.Replace(" ", ""));
+            byte[] bmsg1 = StrHexToByte(msg.Replace(" ", ""));
+            // = Encoding.ASCII.GetBytes("M33722");
             int bl = bmsg.Length;
-                   
+            int bl1 = bmsg1.Length;
             serialP.Write(bmsg, 0, bl);
         }
         public static byte[] FromHex(string hex)
