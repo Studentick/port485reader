@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO.Ports;
 using System.Linq;
 using System.Text;
@@ -15,6 +16,8 @@ namespace Port485Reader
         static string selectedPort = "";
         static int selectedSpeed = 9600;
         static bool flag = true;
+        public static Stopwatch sw = new Stopwatch();
+        public static long tim = 0;
 
 
         static void Main(string[] args)
@@ -25,10 +28,15 @@ namespace Port485Reader
             while (true)
             {
                 Thread.Sleep(500);
-                // tmp = Console.ReadLine();
+                tmp = Console.ReadLine();
                 // tmp = "4D 33 33 37 32 32 0D";
-                tmp = "33722";
+                //tmp = "33722";
+                sw.Restart();
                 SendMsg(tmp);
+                if (tmp == "stop")
+                {
+                    Console.WriteLine("Для получения данных нужно: " + tim + " миллисекунд");
+                }
 
             }
 
@@ -136,10 +144,12 @@ namespace Port485Reader
                                 //listProcess.Items.Add(lvi);
                                 //listProcess.Items[listProcess.Items.Count - 1].EnsureVisible();
                                 // flag = false;
+                                sw.Stop();
                                 Console.WriteLine("HEX: " + message);
                                 message = Encoding.ASCII.GetString(inp, 0, inpQty); // GatewayServer
                                 Console.WriteLine("ASCII: " + message);
-
+                                Console.WriteLine("Пришли за: " + sw.ElapsedMilliseconds);
+                                if (tim < sw.ElapsedMilliseconds) tim = sw.ElapsedMilliseconds;
                             }
                     }
                 }
@@ -151,7 +161,7 @@ namespace Port485Reader
         {
             //string temp = "33722";
             string pre = "4D ", post = " 0D";
-            byte[] ggg = Encoding.ASCII.GetBytes("33722");
+            byte[] ggg = Encoding.ASCII.GetBytes(msg);
             string gggg = "";
             for (Int32 i = 0; i < ggg.Length; i++)
                 gggg += " " + ByteToStrHex(ggg[i]);
