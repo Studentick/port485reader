@@ -29,8 +29,6 @@ namespace Port485Reader
             {
                 Thread.Sleep(500);
                 tmp = Console.ReadLine();
-                // tmp = "4D 33 33 37 32 32 0D";
-                //tmp = "33722";
                 sw.Restart();
                 SendMsg(tmp);
                 if (tmp == "stop")
@@ -43,7 +41,7 @@ namespace Port485Reader
             Console.ReadKey();
         }
 
-        static private void GetPorts(/*object sender, EventArgs e*/)
+        static private void GetPorts()
         {
             try
             {
@@ -56,29 +54,22 @@ namespace Port485Reader
                 if (ports.Length >= 1)
                 {
                     selectedPort = ports[0];
-                    //cmbPortNumber.Text = ports[0];
-                    //cmbPortSpeed.Text = "19200";		//устанавливаем первый в списке СОМ-порт по умолчанию
-                    //cmbPortParity.Text = "None";
-                    //cmbSendPeriod.SelectedIndex = 0;
                 }
                 else
                 {
-                    //MessageBox.Show("COM port is not available!", "COM port", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     Console.WriteLine("COM port is not available!");
-                    //Application.Exit();
                 }
             }
             catch (Exception ex) { Console.WriteLine(ex.Message); }
         }
 
-        private static void tmrReceive_Tick(/*object sender, EventArgs e*/ Object o)
+        private static void tmrReceive_Tick(Object o)
         {
             if (flag == true)
             try
             {
                 byte[] inp;
                 int inpQty = 0;
-                //ListViewItem lvi;
                 string sReceiveDT = "";
                 string message = "";
 
@@ -93,17 +84,6 @@ namespace Port485Reader
                     serialP.Close();
                     serialP.BaudRate = selectedSpeed;
                 }
-                //if ((cmbPortParity.Text == "Odd") && (serialP.Parity != System.IO.Ports.Parity.Odd))
-                //{
-                //    serialP.Close();
-                //    serialP.Parity = System.IO.Ports.Parity.Odd;
-                //}
-                //if ((cmbPortParity.Text == "Even") && (serialP.Parity != System.IO.Ports.Parity.Even))
-                //{
-                //    serialP.Close();
-                //    serialP.Parity = System.IO.Ports.Parity.Even;
-                //}
-                //if ((cmbPortParity.Text == "None") && (serialP.Parity != System.IO.Ports.Parity.None))
                 if (serialP.Parity != System.IO.Ports.Parity.None)
                 {
                     serialP.Close();
@@ -117,7 +97,6 @@ namespace Port485Reader
 
                 if (serialP.IsOpen)
                 {
-                        //flag = false;
                     inp = new Byte[4096];
                     inpQty = 0;
 
@@ -135,15 +114,7 @@ namespace Port485Reader
 
                             for (Int32 i = 0; i < inpQty; i++)
                                 message += " " + ByteToStrHex(inp[i]);      //формируем сообщение для отображения в ListView
-
-                                //lvi = new ListViewItem();
-                                //lvi.ImageKey = "RECEIVE";
-                                //lvi.Text = sReceiveDT;
-                                //lvi.SubItems.Add(inpQty.ToString());
-                                //lvi.SubItems.Add(message);
-                                //listProcess.Items.Add(lvi);
-                                //listProcess.Items[listProcess.Items.Count - 1].EnsureVisible();
-                                // flag = false;
+                            
                                 sw.Stop();
                                 Console.WriteLine("HEX: " + message);
                                 message = Encoding.ASCII.GetString(inp, 0, inpQty); // GatewayServer
@@ -159,7 +130,6 @@ namespace Port485Reader
 
         public static void SendMsg(string msg)
         {
-            //string temp = "33722";
             string pre = "4D ", post = " 0D";
             byte[] ggg = Encoding.ASCII.GetBytes(msg);
             string gggg = "";
@@ -167,7 +137,6 @@ namespace Port485Reader
                 gggg += " " + ByteToStrHex(ggg[i]);
             gggg = pre + gggg + post;
             byte[] bmsg = StrHexToByte(gggg.Replace(" ", ""));
-            // = Encoding.ASCII.GetBytes("M33722");
             int bl = bmsg.Length;
             serialP.Write(bmsg, 0, bl);
         }
