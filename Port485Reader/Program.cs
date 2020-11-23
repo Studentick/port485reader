@@ -28,13 +28,13 @@ namespace Port485Reader
             while (true)
             {
                 Thread.Sleep(500);
-                tmp = Console.ReadLine();
-                sw.Restart();
-                SendMsg(tmp);
-                if (tmp == "stop")
-                {
-                    Console.WriteLine("Для получения данных нужно: " + tim + " миллисекунд");
-                }
+                //tmp = Console.ReadLine();
+                //sw.Restart();
+                //SendMsg(tmp);
+                //if (tmp == "stop")
+                //{
+                //    Console.WriteLine("Для получения данных нужно: " + tim + " миллисекунд");
+                //}
 
             }
 
@@ -53,7 +53,15 @@ namespace Port485Reader
 
                 if (ports.Length >= 1)
                 {
-                    selectedPort = ports[0];
+                    Console.WriteLine("Выберите порт:");
+
+                    // выводим список портов
+                    for (int counter = 0; counter < ports.Length; counter++)
+                    {
+                        Console.WriteLine("[" + counter.ToString() + "] " + ports[counter].ToString());
+                    }
+                    int selected_p = int.Parse(Console.ReadLine());
+                    selectedPort = ports[selected_p];
                 }
                 else
                 {
@@ -116,11 +124,13 @@ namespace Port485Reader
                                 message += " " + ByteToStrHex(inp[i]);      //формируем сообщение для отображения в ListView
                             
                                 sw.Stop();
-                                Console.WriteLine("HEX: " + message);
                                 message = Encoding.ASCII.GetString(inp, 0, inpQty); // GatewayServer
                                 Console.WriteLine("ASCII: " + message);
-                                Console.WriteLine("Пришли за: " + sw.ElapsedMilliseconds);
-                                if (tim < sw.ElapsedMilliseconds) tim = sw.ElapsedMilliseconds;
+                                if (message == "44" || message == "56")
+                                {
+                                    // Console.WriteLine("zbs");
+                                    SendMsg("The message has been recived");
+                                }
                             }
                     }
                 }
@@ -130,12 +140,12 @@ namespace Port485Reader
 
         public static void SendMsg(string msg)
         {
-            string pre = "4D ", post = " 0D";
+            //string pre = "4D ", post = " 0D";
             byte[] ggg = Encoding.ASCII.GetBytes(msg);
             string gggg = "";
             for (Int32 i = 0; i < ggg.Length; i++)
                 gggg += " " + ByteToStrHex(ggg[i]);
-            gggg = pre + gggg + post;
+            // gggg = pre + gggg + post;
             byte[] bmsg = StrHexToByte(gggg.Replace(" ", ""));
             int bl = bmsg.Length;
             serialP.Write(bmsg, 0, bl);
