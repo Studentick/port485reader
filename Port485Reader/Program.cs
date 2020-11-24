@@ -130,7 +130,8 @@ namespace Port485Reader
                                 {
                                     // Console.WriteLine("zbs");
                                     // SendMsg("The message has been recived");
-                                    SendMsg(message + "N0=+210=01345.27=00632.55=094");
+                                    Console.WriteLine(message + "N0=+210=01345.27=00632.55=094=33\n");
+                                    SendMsg(message + "N0=+210=01345.27=00632.55=094=33");
                                 }
                             }
                     }
