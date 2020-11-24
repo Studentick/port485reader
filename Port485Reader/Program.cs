@@ -129,7 +129,8 @@ namespace Port485Reader
                                 if (message == "44" || message == "56")
                                 {
                                     // Console.WriteLine("zbs");
-                                    SendMsg("The message has been recived");
+                                    // SendMsg("The message has been recived");
+                                    SendMsg(message + "N0=+210=01345.27=00632.55=094");
                                 }
                             }
                     }
