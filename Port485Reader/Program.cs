@@ -20,8 +20,10 @@ namespace Port485Reader
         public static long tim = 0;
 
 
+
         static void Main(string[] args)
         {
+            // TopWindowSet.setTop();
             GetPorts();
             Timer t = new Timer(tmrReceive_Tick, null, 0, 500);
             string tmp = "";
@@ -126,11 +128,18 @@ namespace Port485Reader
                                 sw.Stop();
                                 message = Encoding.ASCII.GetString(inp, 0, inpQty); // GatewayServer
                                 Console.WriteLine("ASCII: " + message);
-                                if (message == "44" || message == "56")
+                                string pre = "4D";
+                                if (message == "44")
                                 {
                                     // Console.WriteLine("zbs");
                                     // SendMsg("The message has been recived");
-                                    SendMsg(message + "N0=+210=01345.27=00632.55=094");
+                                    SendMsg(message + "N0=+111=11111=11111=094");
+                                }
+                                else if(message == "56")
+                                {
+                                    // Console.WriteLine("zbs");
+                                    // SendMsg("The message has been recived");
+                                    SendMsg(message + "N0=+222=22222=22222=094");
                                 }
                             }
                     }
