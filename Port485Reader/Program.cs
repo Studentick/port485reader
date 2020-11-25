@@ -18,6 +18,7 @@ namespace Port485Reader
         static bool flag = true;
         public static Stopwatch sw = new Stopwatch();
         public static long tim = 0;
+        static Random proba_error = new Random();
 
 
 
@@ -128,18 +129,30 @@ namespace Port485Reader
                                 sw.Stop();
                                 message = Encoding.ASCII.GetString(inp, 0, inpQty); // GatewayServer
                                 Console.WriteLine("ASCII: " + message);
-                                string pre = "4D";
+                                string pre = Encoding.ASCII.GetString(FromHex("4D")), 
+                                    pos = Encoding.ASCII.GetString(FromHex("0D"));
+                                string datas = "N0=+222=22222=22222=094";
+                                if (message == (pre + "44" + pos))
+                                    datas = "N0=+111=11111=11111=094";
+                                int error = proba_error.Next(1, 35);
+                                int error2 = proba_error.Next(3, 8);
+                                if (error == 1) datas = datas.Substring(0, error2);
+                                message = message.Substring(1, message.Length-2);
+                                //if (message == (pre + "44" + pos))
                                 if (message == "44")
                                 {
                                     // Console.WriteLine("zbs");
                                     // SendMsg("The message has been recived");
-                                    SendMsg(message + "N0=+111=11111=11111=094");
+                                    if (error != 2)
+                                    SendMsg(message + datas);
                                 }
-                                else if(message == "56")
+                                //else if(message == (pre + "56" + pos))
+                                else if (message == "56")
                                 {
                                     // Console.WriteLine("zbs");
                                     // SendMsg("The message has been recived");
-                                    SendMsg(message + "N0=+222=22222=22222=094");
+                                    if (error != 2)
+                                        SendMsg(message + datas);
                                 }
                             }
                     }
