@@ -132,14 +132,15 @@ namespace Port485Reader
                                 string pre = Encoding.ASCII.GetString(FromHex("4D")), 
                                     pos = Encoding.ASCII.GetString(FromHex("0D"));
                                 string datas = "N0=+222=22222=22222=094";
-                                if (message == (pre + "44" + pos))
-                                    datas = "N0=+111=11111=11111=094";
-                                int error = proba_error.Next(1, 35);
+                                if (message == (pre + "33722" + pos))
+                                    //datas = "N0=+111=11111=11111=094";
+                                    datas = "N0=+210=01345.27=00632.55=094";
+                                int error = proba_error.Next(1, 355);
                                 int error2 = proba_error.Next(3, 8);
                                 if (error == 1) datas = datas.Substring(0, error2);
                                 message = message.Substring(1, message.Length-2);
                                 //if (message == (pre + "44" + pos))
-                                if (message == "44")
+                                if (message == "33722")
                                 {
                                     // Console.WriteLine("zbs");
                                     // SendMsg("The message has been recived");
@@ -147,7 +148,7 @@ namespace Port485Reader
                                     SendMsg(message + datas);
                                 }
                                 //else if(message == (pre + "56" + pos))
-                                else if (message == "56")
+                                else if (message == "22733")
                                 {
                                     // Console.WriteLine("zbs");
                                     // SendMsg("The message has been recived");
