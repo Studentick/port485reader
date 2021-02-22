@@ -31,9 +31,9 @@ namespace Port485Reader
             while (true)
             {
                 Thread.Sleep(500);
-                //tmp = Console.ReadLine();
+                tmp = Console.ReadLine();
                 //sw.Restart();
-                //SendMsg(tmp);
+                SendMsg(tmp);
                 //if (tmp == "stop")
                 //{
                 //    Console.WriteLine("Для получения данных нужно: " + tim + " миллисекунд");
